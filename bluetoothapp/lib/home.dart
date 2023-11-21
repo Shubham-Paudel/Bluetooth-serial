@@ -2,6 +2,7 @@
 
 import 'package:bluetoothapp/controllers/bluetooth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,7 +20,8 @@ class HomePage extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Colors.blue,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+            },
             icon: Icon(Icons.menu),
           ),
           actions: [
@@ -41,19 +43,54 @@ class HomePage extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(children: [
               SizedBox(
-                height: 20,
+                height: 30,
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                      controller.scanDevices();
+                  },
+                   style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[800],foregroundColor: Colors.white,
+                   minimumSize: Size(250, 80),
+                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                   ),
                   child: Text(
                     'Scan Devices',
                     style: TextStyle(
                       fontSize: 30,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 20),
+              StreamBuilder<List<ScanResult>>( 
+                stream: controller.scanResults,
+                builder: (context, snapshot){
+                  if(snapshot.hasData)
+                  {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index){
+                        final data = snapshot.data![index];
+                        return Card(  
+                          elevation: 2,
+                          child: ListTile(  
+                            title: Text(data.device.platformName),
+                            subtitle: Text(data.device.remoteId.str),
+                            trailing: Text(data.rssi.toString()),
+                          ),
+                        );
+                      });    
+                  }
+                  else{
+                    return const Center(  
+                      child: Text("No Devices found"),
+                    );
+                  }
+                }
+                ),
             ]),
           );
         },
