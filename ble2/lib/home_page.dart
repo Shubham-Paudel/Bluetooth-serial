@@ -56,7 +56,11 @@ class HomePage extends StatelessWidget {
                           return Center(child: Text("No Device Found"),);
                       }
                     }),
-                ElevatedButton(onPressed: () =>controller.scanDevices(), child: Text("Scan")),
+                ElevatedButton(onPressed: () =>controller.scanDevices(), child: Text("Scan",style: TextStyle(fontSize: 30),),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[800],
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                ),
+                ),
                 SizedBox(
                   height: 15,
                 ),
